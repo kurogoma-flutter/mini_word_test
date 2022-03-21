@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
+import 'home_page.dart';
+
 class WordTestPage extends StatefulWidget {
   const WordTestPage({Key? key}) : super(key: key);
 
@@ -113,11 +115,13 @@ class _WordTestPageState extends State<WordTestPage> {
   }
 
   List<DocumentSnapshot> testDataList = [];
-  _getTestDataList() async {
+  _getTestDataList(BuildContext context) async {
+    final args = ModalRoute.of(context)!.settings.arguments as TestRangeArguments;
+
     var snapshot = await FirebaseFirestore.instance
         .collection('EnglishWordTest')
-        .where('id', isGreaterThanOrEqualTo: 1)
-        .where('id', isLessThanOrEqualTo: 11)
+        .where('id', isGreaterThanOrEqualTo: args.startNo)
+        .where('id', isLessThanOrEqualTo: args.endNo)
         .get();
 
     setState(() {
@@ -129,12 +133,12 @@ class _WordTestPageState extends State<WordTestPage> {
   @override
   void initState() {
     super.initState();
-    _getTestDataList();
   }
 
   @override
-  void dispose() {
-    super.dispose();
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    _getTestDataList(context);
   }
 
   @override
@@ -160,7 +164,7 @@ class _WordTestPageState extends State<WordTestPage> {
             ),
             const SizedBox(height: 100),
             Text(
-              testDataList[questionCount - 1]['mean'],
+              testDataList.isEmpty ? 'エラー' : testDataList[questionCount - 1]['mean'],
               style: const TextStyle(fontSize: 32),
             ),
             const SizedBox(height: 100),
@@ -199,9 +203,7 @@ class _WordTestPageState extends State<WordTestPage> {
               child: ElevatedButton(
                 onPressed: () {
                   _checkResult(data: testDataList[questionCount - 1]['word'], answer: _answerText);
-                  print(clearCount);
-                  print(testDataList[questionCount - 1]['word']);
-                  print(_answerText);
+                  // _getTestDataList(context);
                 },
                 child: const Text(
                   'Check !',

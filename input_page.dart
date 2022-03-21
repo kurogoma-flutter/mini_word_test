@@ -103,7 +103,7 @@ class _WordInputPageState extends State<WordInputPage> {
       ),
       body: Container(
         width: size.width,
-        padding: EdgeInsets.all(20),
+        padding: const EdgeInsets.all(20),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [

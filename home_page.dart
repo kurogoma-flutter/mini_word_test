@@ -57,7 +57,7 @@ class _Section5State extends State<Section5> {
     if (endNo > _lastId) {
       return _alertDialog('データの範囲を超えています。');
     }
-    if (endNo < 5) {
+    if (endNo - startNo < 5 || endNo < 5) {
       return _alertDialog('5問以上の範囲を選択してください。');
     }
     // 通常処理
@@ -180,7 +180,7 @@ class _Section5State extends State<Section5> {
                             counterText: '',
                             border: InputBorder.none,
                           ),
-                          style: TextStyle(color: Colors.black),
+                          style: const TextStyle(color: Colors.black),
                           obscureText: false,
                           maxLines: 1,
                           onChanged: _handleEndNoText,
